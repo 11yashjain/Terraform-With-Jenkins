@@ -14,14 +14,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                bat 'dotnet restore'
-                bat 'dotnet build --configuration Release'
-                bat 'dotnet publish --configuration Release --output publish'
-            }
-        }
-
+        
         stage('Infra Creation') {
             steps {
                 dir('terraform_jenkins') {
@@ -31,6 +24,13 @@ pipeline {
                 }
             }
         }
+        stage('Publish .NET 8 Web API') {
+             steps {
+                 dir('webapi') {
+                     bat 'dotnet publish -c Release -o out'
+                }
+             }
+         }    
 
         stage('Deploy') {
             steps {
