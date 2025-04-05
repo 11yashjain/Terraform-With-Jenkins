@@ -35,9 +35,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([azureServicePrincipal(credentialsId: env.AZURE_CREDENTIALS_ID)]) {
-                    bat 'az login --service-principal -u %AZURE_CLIENT_ID% -p %AZURE_CLIENT_SECRET% --tenant %AZURE_TENANT_ID%'
-                    bat 'az account set --subscription %AZURE_SUBSCRIPTION_ID%'
-                    bat 'az webapp deploy --resource-group rg-jenkins --name webapijenkins691122 --src-path webapi\\out --type zip'
+                   bat '''
+    az login --service-principal -u %AZURE_CLIENT_ID% -p %AZURE_CLIENT_SECRET% --tenant %AZURE_TENANT_ID%
+    az account set --subscription %AZURE_SUBSCRIPTION_ID%
+    powershell -Command "Compress-Archive -Path webapi\\out\\* -DestinationPath webapi\\publish.zip -Force"
+    az webapp deploy --resource-group %RESOURCE_GROUP% --name %APP_SERVICE_NAME% --src-path webapi\\publish.zip --type zip
+'''
+
                 }
             }
         }
