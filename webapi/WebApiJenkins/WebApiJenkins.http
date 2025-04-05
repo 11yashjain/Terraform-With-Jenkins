@@ -1,0 +1,6 @@
+@WebApiJenkins_HostAddress = http://localhost:5053
+
+GET {{WebApiJenkins_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
