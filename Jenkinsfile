@@ -35,8 +35,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([azureServicePrincipal(credentialsId: env.AZURE_CREDENTIALS_ID)]) {
-                    bat 'az login --service-principal -u %ARM_CLIENT_ID% -p %ARM_CLIENT_SECRET% --tenant %ARM_TENANT_ID%'
-                    bat 'az account set --subscription %ARM_SUBSCRIPTION_ID%'
+                    bat 'az login --service-principal -u %AZURE_CLIENT_ID% -p %ARM_CLIENT_SECRET% --tenant %ARM_TENANT_ID%'
+                    bat 'az account set --subscription %AZURE_SUBSCRIPTION_ID%'
                     bat 'az webapp deploy --resource-group rg-jenkins --name webapijenkins691122 --src-path webapi\\out --type zip'
                 }
             }
